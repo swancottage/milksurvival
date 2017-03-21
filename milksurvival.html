@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+<form>
+<label>Percentage of Ki67</label>
+	<input type="text" id="ki67" value=0 size="1" onchange="Cal()"></br>
+<label>Tumor Size in cm</label>
+	<input type="text" id="tsize" value=0 size="1" onchange="Cal()"></br>
+<label>Presence of LVI</label>
+	<input type="checkbox" id="lvi" value=0 size="1" onchange="Cal()"></br>
+</br>
+<label>10-year recurrent rate</label>
+	<input type="text" id="rate" value=0 size="20" readonly="true">
+</form>
+</body>
+
+<script type="text/javascript">
+// log(odd) = -3.535 + 0.020(Ki67) +0.165(TSize)  + 1.111(LVI)
+
+function Cal(){
+	var ki = ki67.value
+	var ts = tsize.value
+	var lv = lvi.checked
+        var msg = "0"
+	if(ki<0 || ki>100 || isNaN(ki))
+		{rate.value="ki67 error";
+		return 0;}
+	else if(ts<0 || isNaN(ts))
+		{rate.value="Tumor size error";
+		return 0;}
+	else{
+		ki = ki*0.02;
+		ts = ts*0.165;
+		var lvv = 0;
+		if(lv) lvv=1.111;
+		var odd = -3.535 +ki +ts +lvv;
+		odd = Math.exp(odd);
+		odd = odd/(1+odd);
+		rate.value = odd.toFixed(2);
+		return;
+	}
+}
+</script>
